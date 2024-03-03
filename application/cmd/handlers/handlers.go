@@ -7,6 +7,7 @@ import (
 	"log"
 	"net/http"
 	"strconv"
+	"strings"
 	"time"
 	"url-shortener/internal/db"
 	"url-shortener/internal/hash"
@@ -55,11 +56,18 @@ func (s *Server) shorten(w http.ResponseWriter, r *http.Request) {
 		defaultTTL = false
 	}
 
+	var hostValue string
+	if strings.Contains(r.Proto, "HTTPS") {
+		hostValue = "https://" + r.Host
+	} else {
+		hostValue = "http://" + r.Host
+	}
+
 	data, err := s.DB.DDBPutItem(db.Item{
 		LongURL:    requestBody.URL,
 		TTL:        expiry,
 		DefaultTTL: defaultTTL,
-	}, r.RequestURI)
+	}, hostValue)
 	if err != nil {
 		http.Error(w, errors.New("error: "+err.Error()).Error(), http.StatusBadRequest)
 		return
