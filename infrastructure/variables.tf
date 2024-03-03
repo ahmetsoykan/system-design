@@ -9,13 +9,13 @@ variable "region" {
   default = "eu-west-1"
 }
 
-variable "domain_name" {
-  type = string
-}
+# variable "domain_name" {
+#   type = string
+# }
 
-variable "zone_id" {
-  type = string
-}
+# variable "zone_id" {
+#   type = string
+# }
 
 variable "tags" {
   default = {
