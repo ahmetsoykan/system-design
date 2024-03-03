@@ -16,14 +16,14 @@ func TestEncodeShortenURLID(t *testing.T) {
 	}
 }
 
-func TestDecodeShortURL(t *testing.T) {
+func TestDecodeShortURLPath(t *testing.T) {
 
-	shortURL := "1c"
+	short := "1c"
 	// decoding
 	want := uint64(100)
-	got := Decode(shortURL)
+	got := Decode(short)
 
 	if want != got {
-		t.Errorf("got %d, want %d, given %s", got, want, shortURL)
+		t.Errorf("got %d, want %d, given %s", got, want, short)
 	}
 }

@@ -59,7 +59,7 @@ func (s *Server) shorten(w http.ResponseWriter, r *http.Request) {
 		LongURL:    requestBody.URL,
 		TTL:        expiry,
 		DefaultTTL: defaultTTL,
-	})
+	}, r.Proto+"://"+r.Host+"/")
 	if err != nil {
 		http.Error(w, errors.New("error: "+err.Error()).Error(), http.StatusBadRequest)
 		return
@@ -70,26 +70,26 @@ func (s *Server) shorten(w http.ResponseWriter, r *http.Request) {
 	w.Write(jsonData)
 }
 
-// redirect endpoint read shorturl corresponding value from cache
+// redirect endpoint read short path corresponding value from cache
 // if it returns empty result.
-// reads shorturl key from database, puts it to cache and extends its TTL 90 days more
+// reads short path key from database, puts it to cache and extends its TTL 90 days more
 // Redirect!
 // if it returns the longsurl value
 // Redirect!
 func (s *Server) redirect(w http.ResponseWriter, r *http.Request) {
 
-	var shortURL string
+	var short string
 	var longURL string
 
 	// checking cache
-	shortURL = strconv.FormatUint(hash.Decode(chi.URLParam(r, "shorturl")), 10)
-	val, _ := s.Cache.Get(shortURL)
+	short = strconv.FormatUint(hash.Decode(chi.URLParam(r, "short")), 10)
+	val, _ := s.Cache.Get(short)
 	if val != "" {
 		// found in cache
 		longURL = val
 	} else {
 		// checking database
-		item, err := s.DB.GetItembyPK(shortURL)
+		item, err := s.DB.GetItembyPK(short)
 		if err != nil {
 			http.Error(w, errors.New("error: url not found").Error(), http.StatusNotFound)
 			return
@@ -101,15 +101,14 @@ func (s *Server) redirect(w http.ResponseWriter, r *http.Request) {
 		// found in database
 		// putting it to cache
 		longURL = item.LongURL
-		err = s.Cache.Set(shortURL, longURL)
+		err = s.Cache.Set(short, longURL)
 		if err != nil {
 			http.Error(w, errors.New("error: cache cant be updated, reason: "+err.Error()).Error(), http.StatusBadGateway)
 			return
 		}
 
 		// extending TTL in database 90 days more
-		// TODO: make it async
-		err = s.DB.ExtendTTL(shortURL)
+		err = s.DB.ExtendTTL(short)
 		if err != nil {
 			http.Error(w, errors.New("error: ttl can't be extended, reason: "+err.Error()).Error(), http.StatusBadGateway)
 			return

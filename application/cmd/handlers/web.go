@@ -45,5 +45,5 @@ func (s *Server) routes() {
 	s.Router.Get("/", s.health)
 	s.Router.Get("/health", s.health)
 	s.Router.Post("/shorten", s.shorten)
-	s.Router.Get("/{shorturl}", s.redirect)
+	s.Router.Get("/{short}", s.redirect)
 }
