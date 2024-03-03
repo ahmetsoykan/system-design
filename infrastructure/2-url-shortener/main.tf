@@ -51,8 +51,8 @@ module "ecs" {
   az     = local.azs
 
   # container
-  container_port = var.container_port
-  container_tag  = var.container_tag
+  container_port  = var.container_port
+  container_image = var.container_image
 
   # network
   vpc_id          = module.vpc.vpc_id

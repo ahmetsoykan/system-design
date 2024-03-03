@@ -32,7 +32,7 @@ variable "tags" {
   type = map(string)
 }
 
-variable "container_tag" {
+variable "container_image" {
   type = string
 }
 

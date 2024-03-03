@@ -33,10 +33,8 @@ variable "container_port" {
   default = 8080
 }
 
-variable "container_tag" {
+variable "container_image" {
   type    = string
-  default = "latest"
-
 }
 variable "target_group_name" {
   type    = string

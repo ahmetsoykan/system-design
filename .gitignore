@@ -1,0 +1,3 @@
+!infrastructure/1-terraform-base/*.tf
+infrastructure/1-terraform-base/*.hcl
+infrastructure/1-terraform-base/terraform*
