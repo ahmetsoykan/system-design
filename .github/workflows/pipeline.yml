@@ -79,5 +79,5 @@ jobs:
       working-directory: ./infrastructure/2-url-shortener
 
     - name: Terraform Apply
-      run: terraform apply -auto-approve -input=false
+      run: terraform apply -auto-approve -var container_image=${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:`echo $GITHUB_REF | sed 's|refs/tags/v||'`
       working-directory: ./infrastructure/2-url-shortener
