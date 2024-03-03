@@ -38,8 +38,8 @@ module "ecs_service" {
 
   tasks_iam_role_statements = [{
     effect    = "Allow"
-    actions   = ["dynamodb:*", ]
-    resources = ["${var.dynamodb_table_arn}"]
+    actions   = ["dynamodb:*"]
+    resources = ["${var.dynamodb_table_arn}", "${var.dynamodb_table_arn}/*"]
   }]
 
   # Enables ECS Exec
