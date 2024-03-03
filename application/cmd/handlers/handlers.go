@@ -59,7 +59,7 @@ func (s *Server) shorten(w http.ResponseWriter, r *http.Request) {
 		LongURL:    requestBody.URL,
 		TTL:        expiry,
 		DefaultTTL: defaultTTL,
-	}, r.Proto+"://"+r.Host+"/")
+	}, r.RequestURI)
 	if err != nil {
 		http.Error(w, errors.New("error: "+err.Error()).Error(), http.StatusBadRequest)
 		return
