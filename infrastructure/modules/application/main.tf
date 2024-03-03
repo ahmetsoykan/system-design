@@ -64,7 +64,7 @@ module "ecs_service" {
       cpu       = 1024
       memory    = 4096
       essential = true
-      image     = var.container_image
+      image     = "asoykan/url-shortener:${var.container_tag}"
       port_mappings = [
         {
           name          = local.container_name

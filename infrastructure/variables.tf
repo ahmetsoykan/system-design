@@ -33,9 +33,9 @@ variable "container_port" {
   default = 8080
 }
 
-variable "container_image" {
+variable "container_tag" {
   type    = string
-  default = "asoykan/url-shortener:v0.0.3"
+  default = "latest"
 
 }
 variable "target_group_name" {
