@@ -10,11 +10,11 @@ terraform {
     }
   }
 
-  backend "s3" {
-    bucket = "ahmetsoykan-terraform-state"
-    key    = "dev/url-shortener/terraform.tfstate"
-    region = var.region
-  }
+  # backend "s3" {
+  #   bucket = "ahmetsoykan-terraform-state"
+  #   key    = "dev/url-shortener/terraform.tfstate"
+  #   region = var.region
+  # }
 
   required_version = "~> 1.0"
 }
