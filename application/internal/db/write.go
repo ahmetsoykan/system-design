@@ -55,7 +55,7 @@ func (d *DynamoDB) DDBInit() {
 }
 
 // DDBPutItem inserts an URL item and increments the lastid of the metadata item.
-func (d *DynamoDB) DDBPutItem(item Item, hostValue string) (Item, error) {
+func (d *DynamoDB) DDBPutItem(item Item) (Item, error) {
 
 	// Existance Check
 	existingItem, err := d.GetItembyGSI(item.LongURL)
@@ -71,7 +71,6 @@ func (d *DynamoDB) DDBPutItem(item Item, hostValue string) (Item, error) {
 	// Find the last inserted item's ID, and encode the next ID for the new URL.
 	lastid, _ := d.GetLastIDbyMetadataPK()
 	item.ID = fmt.Sprintf("%d", lastid+1)
-	item.ShortURL = fmt.Sprintf("%s/%s", hostValue, hash.Encode(lastid+1))
 	item.Short = fmt.Sprintf("%s", hash.Encode(lastid+1))
 
 	av, err := dynamodbattribute.MarshalMap(item)
