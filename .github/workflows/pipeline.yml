@@ -75,7 +75,7 @@ jobs:
       working-directory: ./infrastructure
 
     - name: Terraform Plan
-      run: terraform plan -var container_tag=${GITHUB_REF:10}
+      run: terraform plan -var container_tag=`echo $GITHUB_REF | sed 's|refs/tags/v||'`
       working-directory: ./infrastructure
 
     - name: Terraform Apply
