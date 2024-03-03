@@ -20,7 +20,7 @@ env:
 
 jobs:
   docker:
-    runs-on: alpine
+    runs-on: ubuntu-latest
     permissions:
       contents: read
 
