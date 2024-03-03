@@ -82,7 +82,7 @@ func (s *Server) redirect(w http.ResponseWriter, r *http.Request) {
 	var longURL string
 
 	// checking cache
-	shortURL = strconv.FormatUint(hash.Decode(chi.URLParam(r, "shortenurl")), 10)
+	shortURL = strconv.FormatUint(hash.Decode(chi.URLParam(r, "shorturl")), 10)
 	val, _ := s.Cache.Get(shortURL)
 	if val != "" {
 		// found in cache
