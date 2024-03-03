@@ -74,9 +74,9 @@ jobs:
       working-directory: ./infrastructure/2-url-shortener
 
     - name: Terraform Plan
-      run: terraform plan -var container_image=${{ steps.meta.outputs.tags.0 }}
+      run: terraform plan -var container_image=${{ steps.meta.outputs.tags[0] }}
       working-directory: ./infrastructure/2-url-shortener
 
     - name: Terraform Apply
-      run: terraform apply -var container_image=${{ steps.meta.outputs.tags.0 }} -auto-approve
+      run: terraform apply -var container_image=${{ steps.meta.outputs.tags[0] }} -auto-approve
       working-directory: ./infrastructure/2-url-shortener
