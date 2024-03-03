@@ -1,5 +1,5 @@
 provider "aws" {
-  region = var.region
+  region = "eu-west-1"
 }
 
 terraform {
@@ -13,7 +13,7 @@ terraform {
   backend "s3" {
     bucket = "ahmetsoykan-terraform-state"
     key    = "dev/url-shortener/terraform.tfstate"
-    region = var.region
+    region = "eu-west-1"
   }
 
   required_version = "~> 1.0"
