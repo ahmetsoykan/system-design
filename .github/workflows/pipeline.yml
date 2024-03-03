@@ -10,9 +10,8 @@ on:
     tags: [ 'v*.*.*' ]
 
 env:
-  # Use docker.io for Docker Hub if empty
+  # output of 1-terraform-base
   REGISTRY: 414826488179.dkr.ecr.eu-west-1.amazonaws.com
-  # github.repository as <account>/<repo>
   IMAGE_NAME: url-shortener
   AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
   AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
@@ -75,9 +74,9 @@ jobs:
       working-directory: ./infrastructure/2-url-shortener
 
     - name: Terraform Plan
-      run: terraform plan -var container_image=${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:`echo $GITHUB_REF | sed 's|refs/tags/v||'`
+      run: terraform plan -var container_image=${{ steps.meta.outputs.tags.0 }}
       working-directory: ./infrastructure/2-url-shortener
 
     - name: Terraform Apply
-      run: terraform apply -auto-approve -var container_image=${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:`echo $GITHUB_REF | sed 's|refs/tags/v||'`
+      run: terraform apply -var container_image=${{ steps.meta.outputs.tags.0 }} -auto-approve
       working-directory: ./infrastructure/2-url-shortener
