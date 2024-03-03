@@ -18,7 +18,7 @@ env:
   AWS_DEFAULT_REGION: ${{ secrets.AWS_DEFAULT_REGION }}
 
 jobs:
-  docker:
+  deploy:
     runs-on: ubuntu-latest
     permissions:
       contents: read
@@ -35,6 +35,8 @@ jobs:
         uses: docker/metadata-action@96383f45573cb7f253c731d3b3ab81c87ef81934 # v5.0.0
         with:
           images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
+          flavor: |
+            latest=false
       
       - name: Login to GitHub Container Registry
         uses: docker/login-action@v3
@@ -54,29 +56,22 @@ jobs:
           cache-from: type=gha
           cache-to: type=gha,mode=max
 
-  terraform:
-    name: terraform
-    needs: [docker]
-    runs-on: ubuntu-latest
-    environment: development
+      - name: Checkout
+        uses: actions/checkout@v3
 
-    steps:
-    - name: Checkout
-      uses: actions/checkout@v3
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v3
+        with:
+          terraform_version: "1.7.4"
 
-    - name: Setup Terraform
-      uses: hashicorp/setup-terraform@v3
-      with:
-        terraform_version: "1.7.4"
+      - name: Terraform Init
+        run: terraform init
+        working-directory: ./infrastructure/2-url-shortener
 
-    - name: Terraform Init
-      run: terraform init
-      working-directory: ./infrastructure/2-url-shortener
+      - name: Terraform Plan
+        run: terraform plan -var container_image=${{ steps.meta.outputs.tags[0] }}
+        working-directory: ./infrastructure/2-url-shortener
 
-    - name: Terraform Plan
-      run: terraform plan -var container_image=${{ steps.meta.outputs.tags[0] }}
-      working-directory: ./infrastructure/2-url-shortener
-
-    - name: Terraform Apply
-      run: terraform apply -var container_image=${{ steps.meta.outputs.tags[0] }} -auto-approve
-      working-directory: ./infrastructure/2-url-shortener
+      - name: Terraform Apply
+        run: terraform apply -var container_image=${{ steps.meta.outputs.tags[0] }} -auto-approve
+        working-directory: ./infrastructure/2-url-shortener
