@@ -34,7 +34,7 @@ variable "container_port" {
 }
 
 variable "container_image" {
-  type    = string
+  type = string
 }
 variable "target_group_name" {
   type    = string
