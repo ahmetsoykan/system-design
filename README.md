@@ -8,7 +8,7 @@ You can see the API endpoints below:
 ```bash
 Service: url-shortener 
 Endpoints:
-  POST - http://url-shortener-171881231.***.elb.amazonaws.com/shorten -d '{"url": "", "ttl": "optional")}' 
+  POST - http://url-shortener-171881231.***.elb.amazonaws.com/shorten -d '{"url": "http://ahmetsoykan.com", "ttl": "1710899691"}' # ttl is optional 
   GET - http://url-shortener-171881231.***.elb.amazonaws.com/health
   GET - http://url-shortener-171881231.***.elb.amazonaws.com/{short}
   ...
