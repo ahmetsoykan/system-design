@@ -1,14 +1,14 @@
 # url-shortener
 
 ## Intro
-url-shortener is responsible for generationg short URLs and handling redirecting back to original URL when short url endpoint called.
+url-shortener is responsible for generationg short URLs and handling redirection back to original URL when short url endpoint has called.
 
 You can see the API endpoints below:
 
 ```bash
 Service: url-shortener 
 Endpoints:
-  POST - http://url-shortener-171881231.***.elb.amazonaws.com/shorten -d '{"url": "", "ttl": "ttl is optional")}' 
+  POST - http://url-shortener-171881231.***.elb.amazonaws.com/shorten -d '{"url": "", "ttl": "optional")}' 
   GET - http://url-shortener-171881231.***.elb.amazonaws.com/health
   GET - http://url-shortener-171881231.***.elb.amazonaws.com/{short}
   ...
@@ -20,24 +20,24 @@ Endpoints:
 
 Redirection: (Read Path)
 - Client sends a request to servers, example http://address.com/Q0w
-- Server decodes Q0v value, which will be a logical ID
-- checks cache server with ID, if found redirect user to its value(original URL)
-- If not found, fallbacks to database and it finds the value there
-- extends expire date in database with more 90 day
-- writes the value the cache with 30 minute expire time
-- then it redirects
+- Server decodes Q0v value, which refers to a logical ID
+- checks cache server with ID, if found redirects user to its value(original URL)
+- If not found, fallbacks to database and finds the value
+- extends expire date in database with more 90 day because it has accessed within 90 day
+- writes the value the cache with 30 minute expiration
+- then redirects
 
 Short URL Generation: (Write Path)
 - Client send a post request to servers, example http://address.com/shorten -d ''
-- Server checks the existence, if found, returns the old short URL info
-- If not exist, it gets the last generated URL's ID, and increments it by one for auto incrementing
-- encodes this auto-increment, not the URL value. It uses like a pointer
-- (info) Encoding creates an unique and consistent output from predefined 62 chars, so it can be decoded back to original. (base62 conversion)
-- (info) As the app is using this consistent hashing, it enables us to get more benefits from using caches.
+- Server checks the existence in database, if found returns the short URL info
+- If not exist, it gets the last generated URL's ID, and increments it by 1 for auto incrementing
+- encodes this auto-increment, not the whole URL value. It uses this like a pointer
+- (info) Encoding creates unique and consistent output from predefined 62 chars, so it can be decoded back to original. (base62 conversion)
+- (info) As the app is using consistent hashing in that manner, this enables us to get more benefits with caching caches.
 - returns what is created in database
 
 
-## Deployment Steps
+## Setup
 
 This application requires 2 terraform deployments, one for terraform states and one for application itself.
 
@@ -52,8 +52,8 @@ If the Bucket and ECR created, follow with the next step.
 
 ### Pipeline configurations
 - create a repository on github and commit
-- update repository variables with these keys which are defined at .github/workflow/pipeline.yml at line 12.
-- commit a tag to repository and this deploys the application and its infrastructure and shares the reachable URL with you
+- update repository variables with expected keys which are also defined on .github/workflow/pipeline.yml at line 12.
+- commit a tag to repository and this deploys the application and infrastructure and shares the reachable URL with you
 - test
 
 ## Performance
@@ -146,5 +146,4 @@ Percentage of the requests served within a certain time (ms)
   98%     54
   99%     76
  100%    451 (longest request)
-
 ```
