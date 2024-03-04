@@ -16,7 +16,7 @@ Endpoints:
 
 ## Architecture
 
-![Performance](./assets/url-shortener-arc.png)
+![Arc](./img/url-shortener-arc.png)
 
 Redirection: (Read Path)
 - Client sends a request to servers, example http://address.com/Q0w
@@ -27,6 +27,8 @@ Redirection: (Read Path)
 - writes the value the cache with 30 minute expiration
 - then redirects
 
+![Red](./img/redirect.png)
+
 Short URL Generation: (Write Path)
 - Client send a post request to servers, example http://address.com/shorten -d ''
 - Server checks the existence in database, if found returns the short URL info
@@ -36,10 +38,15 @@ Short URL Generation: (Write Path)
 - (info) As the app is using consistent hashing in that manner, this enables us to get more benefits with caching caches.
 - returns what is created in database
 
+![Short](./img/url-shortener-arc.png)
+
 
 ## Setup
 
 This application requires 2 terraform deployments, one for terraform states and one for application itself.
+
+- 1-terraform-base: deploys S3 Bucket and ECR
+- 2-url-shortener: deploys application on ECS and creates EC2 Application Load Balancer with its Databases(DynamoDB, Elasticache)
 
 Here are the steps:
 ### creating S3 Bucket and ECR repository
