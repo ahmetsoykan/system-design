@@ -6,7 +6,6 @@ import (
 	"url-shortener/internal/db"
 
 	"github.com/go-chi/chi"
-	"github.com/go-chi/render"
 )
 
 // App is the entrypoint into our application and what controls the context of
