@@ -65,7 +65,7 @@ variable "deployment_minimum_healthy_percent" {
 variable "desired_count" {
   description = "Number of instances of the task definition to place and keep running"
   type        = number
-  default     = 2
+  default     = 3
 }
 
 variable "enable_ecs_managed_tags" {
@@ -568,13 +568,13 @@ variable "enable_autoscaling" {
 variable "autoscaling_min_capacity" {
   description = "Minimum number of tasks to run in your service"
   type        = number
-  default     = 1
+  default     = 3
 }
 
 variable "autoscaling_max_capacity" {
   description = "Maximum number of tasks to run in your service"
   type        = number
-  default     = 10
+  default     = 50
 }
 
 variable "autoscaling_policies" {

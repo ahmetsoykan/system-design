@@ -42,7 +42,7 @@ Short URL Generation: (Write Path)
 This application requires 2 terraform deployments, one for terraform states and one for application itself.
 
 Here are the steps:
-# creating S3 Bucket and ECR repository
+### creating S3 Bucket and ECR repository
 - cd ./infrastructure/1-terraform-base
 - terraform init
 - terraform plan
@@ -50,7 +50,7 @@ Here are the steps:
 
 If the Bucket and ECR created, follow with the next step.
 
-# Pipeline configurations
+### Pipeline configurations
 - create a repository on github and commit
 - update repository variables with these keys which are defined at .github/workflow/pipeline.yml at line 12.
 - commit a tag to repository and this deploys the application and its infrastructure and shares the reachable URL with you
@@ -58,40 +58,93 @@ If the Bucket and ECR created, follow with the next step.
 
 ## Performance
 
-- Redirect path performance tests
+- Redirect endpoint performance tests
 
 ```bash
-        script: ./assets/load-test/redirect.js
-        output: -
 
-     scenarios: (100.00%) 1 scenario, 15 max VUs, 3m30s max duration (incl. graceful stop):
-              * default: Up to 15 looping VUs for 3m0s over 3 stages (gracefulRampDown: 30s, gracefulStop: 30s)
+Benchmarking url-shortener-171881231.eu-west-1.elb.amazonaws.com (be patient)
+Server Software:        
+Server Hostname:        url-shortener-171881231.eu-west-1.elb.amazonaws.com
+Server Port:            80
 
+Document Path:          /Q0w
+Document Length:        53 bytes
 
-     ✓ status was 200
+Concurrency Level:      200
+Time taken for tests:   2.878 seconds
+Complete requests:      10000
+Failed requests:        0
+Non-2xx responses:      10000
+Keep-Alive requests:    10000
+Total transferred:      2380000 bytes
+HTML transferred:       530000 bytes
+Requests per second:    3474.89 [#/sec] (mean)
+Time per request:       57.556 [ms] (mean)
+Time per request:       0.288 [ms] (mean, across all concurrent requests)
+Transfer rate:          807.64 [Kbytes/sec] received
 
-     checks.........................: 100.00% ✓ 956       ✗ 0   
-     data_received..................: 448 MB  2.5 MB/s
-     data_sent......................: 2.2 MB  12 kB/s
-     http_req_blocked...............: avg=530.59µs min=0s      med=1µs     max=101ms    p(90)=10µs     p(95)=13µs    
-     http_req_connecting............: avg=277.56µs min=0s      med=0s      max=58.11ms  p(90)=0s       p(95)=0s      
-   ✓ http_req_duration..............: avg=136.84ms min=14.16ms med=39.39ms max=704.05ms p(90)=415.35ms p(95)=464.84ms
-       { expected_response:true }...: avg=136.84ms min=14.16ms med=39.39ms max=704.05ms p(90)=415.35ms p(95)=464.84ms
-     http_req_failed................: 0.00%   ✓ 0         ✗ 6467
-     http_req_receiving.............: avg=8.73ms   min=13µs    med=148µs   max=110.6ms  p(90)=52.71ms  p(95)=58.71ms 
-     http_req_sending...............: avg=86.36µs  min=4µs     med=75µs    max=18.31ms  p(90)=139µs    p(95)=161µs   
-     http_req_tls_handshaking.......: avg=233.06µs min=0s      med=0s      max=78.36ms  p(90)=0s       p(95)=0s      
-     http_req_waiting...............: avg=128.01ms min=6.57ms  med=38.98ms max=703.86ms p(90)=414.7ms  p(95)=464.24ms
-     http_reqs......................: 6467    35.576911/s
-     iteration_duration.............: avg=1.93s    min=1.18s   med=1.97s   max=2.34s    p(90)=2.15s    p(95)=2.19s   
-     iterations.....................: 956     5.259243/s
-     vus............................: 1       min=1       max=15
-     vus_max........................: 15      min=15      max=15
+Connection Times (ms)
+              min  mean[+/-sd] median   max
+Connect:        0   10 109.0      0    1654
+Processing:    22   46  85.6     33     873
+Waiting:       22   45  85.6     33     873
+Total:         22   56 167.8     33    2104
 
-
-running (3m01.8s), 00/15 VUs, 956 complete and 0 interrupted iterations
-default ✓ [======================================] 00/15 VUs  3m0s
+Percentage of the requests served within a certain time (ms)
+  50%     33
+  66%     34
+  75%     35
+  80%     35
+  90%     37
+  95%     41
+  98%    118
+  99%    980
+ 100%   2104 (longest request)
 ```
 
 - Shorten endpoint performance tests
 
+```bash
+Benchmarking url-shortener-171881231.eu-west-1.elb.amazonaws.com (be patient)
+
+Server Software:        
+Server Hostname:        url-shortener-171881231.eu-west-1.elb.amazonaws.com
+Server Port:            80
+
+Document Path:          /shorten
+Document Length:        107 bytes
+
+Concurrency Level:      50
+Time taken for tests:   8.129 seconds
+Complete requests:      10000
+Failed requests:        0
+Keep-Alive requests:    10000
+Total transferred:      2490000 bytes
+Total body sent:        2330000
+HTML transferred:       1070000 bytes
+Requests per second:    1230.09 [#/sec] (mean)
+Time per request:       40.647 [ms] (mean)
+Time per request:       0.813 [ms] (mean, across all concurrent requests)
+Transfer rate:          299.11 [Kbytes/sec] received
+                        279.89 kb/s sent
+                        579.01 kb/s total
+
+Connection Times (ms)
+              min  mean[+/-sd] median   max
+Connect:        0    0   6.4      0     161
+Processing:    27   40  13.4     38     302
+Waiting:       27   40  13.4     38     302
+Total:         27   40  19.1     38     451
+
+Percentage of the requests served within a certain time (ms)
+  50%     38
+  66%     39
+  75%     40
+  80%     41
+  90%     44
+  95%     48
+  98%     54
+  99%     76
+ 100%    451 (longest request)
+
+```
