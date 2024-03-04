@@ -41,7 +41,7 @@ func NewServer(s Config) *Server {
 
 func (s *Server) routes() {
 
-	s.Router.Use(render.SetContentType(render.ContentTypeJSON))
+	//s.Router.Use(render.SetContentType(render.))
 	s.Router.Get("/", s.health)
 	s.Router.Get("/health", s.health)
 	s.Router.Post("/shorten", s.shorten)
