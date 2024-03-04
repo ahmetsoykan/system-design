@@ -38,7 +38,7 @@ Short URL Generation: (Write Path)
 - (info) As the app is using consistent hashing in that manner, this enables us to get more benefits with caching caches.
 - returns what is created in database
 
-![Short](./img/url-shortener-arc.png)
+![Short](./img/shorten.png)
 
 
 ## Setup
