@@ -49,7 +49,7 @@ jobs:
         id: build-and-push
         uses: docker/build-push-action@0565240e2d4ab88bba5387d719585280857ece09 # v5.0.0
         with:
-          context: "{{defaultContext}}:application"
+          context: "{{defaultContext}}:url-shortener/application"
           push: ${{ github.event_name != 'pull_request' }}
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
@@ -63,16 +63,16 @@ jobs:
 
       - name: Terraform Init
         run: terraform init
-        working-directory: ./infrastructure/2-url-shortener
+        working-directory: ./url-shortener/infrastructure/2-url-shortener
 
       - name: Terraform Plan
         run: terraform plan -var container_image=`echo $TAG`
-        working-directory: ./infrastructure/2-url-shortener
+        working-directory: ./url-shortener/infrastructure/2-url-shortener
         env:
           TAG: ${{ steps.meta.outputs.tags }}
 
       - name: Terraform Apply
         run: terraform apply -var container_image=`echo $TAG` -auto-approve
-        working-directory: ./infrastructure/2-url-shortener
+        working-directory: ./url-shortener/infrastructure/2-url-shortener
         env:
           TAG: ${{ steps.meta.outputs.tags }}
