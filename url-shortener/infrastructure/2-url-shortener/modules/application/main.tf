@@ -48,17 +48,27 @@ module "ecs_service" {
   # Container definition(s)
   container_definitions = {
 
-    # fluent-bit = {
-    #   cpu       = 512
-    #   memory    = 1024
-    #   essential = true
-    #   image     = nonsensitive(data.aws_ssm_parameter.fluentbit.value)
-    #   firelens_configuration = {
-    #     type = "fluentbit"
-    #   }
-    #   memory_reservation = 50
-    #   user               = "0"
-    # }
+    awscollector = {
+      cpu                = 512
+      memory             = 1024
+      essential          = true
+      image              = "public.ecr.aws/aws-observability/aws-otel-collector:latest"
+      memory_reservation = 100
+      port_mappings = [
+        {
+          name          = "awscollector"
+          containerPort = "4317"
+          hostPort      = "4317"
+          protocol      = "tcp"
+        }
+      ]
+      environment = [
+        {
+          name  = "AWS_REGION"
+          value = "${var.region}"
+        }
+      ]
+    }
 
     (local.container_name) = {
       cpu       = 1024

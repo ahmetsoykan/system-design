@@ -5,13 +5,14 @@ import (
 	"url-shortener/internal/cache"
 	"url-shortener/internal/db"
 
-	"github.com/go-chi/chi"
+	"github.com/gorilla/mux"
+	"go.opentelemetry.io/contrib/instrumentation/github.com/gorilla/mux/otelmux"
 )
 
 // App is the entrypoint into our application and what controls the context of
 // each request. Feel free to add any configuration data/logic on this type.
 type Server struct {
-	Router *chi.Mux
+	Router *mux.Router
 	Cache  *cache.RedisCache
 	DB     *db.DynamoDB
 }
@@ -20,7 +21,7 @@ type Server struct {
 func NewServer(s Config) *Server {
 
 	srv := &Server{
-		Router: chi.NewRouter(),
+		Router: mux.NewRouter(),
 		Cache:  cache.NewRedisCache(s.RedisHost),
 		DB:     db.NewDynamoDBClient(s.Region),
 	}
@@ -41,8 +42,11 @@ func NewServer(s Config) *Server {
 
 func (s *Server) routes() {
 
-	s.Router.Get("/", s.health)
-	s.Router.Get("/health", s.health)
-	s.Router.Post("/shorten", s.shorten)
-	s.Router.Get("/{short}", s.redirect)
+	s.Router.Use(otelmux.Middleware("url-shortener"))
+
+	s.Router.HandleFunc("/", s.health).Methods("GET")
+	s.Router.HandleFunc("/health", s.health).Methods("GET")
+	s.Router.HandleFunc("/shorten", s.shorten).Methods("POST")
+	s.Router.HandleFunc("/{short}", s.redirect).Methods("GET")
+
 }
