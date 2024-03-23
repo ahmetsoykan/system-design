@@ -22,10 +22,10 @@ func NewDynamoDBClient(region string) *DynamoDB {
 }
 
 type Item struct {
-	ID         string `json:"id"`
-	LongURL    string `json:"longurl"`
-	Short      string `json:"short"`
-	LastID     uint64 `json:"lastid"`
-	TTL        int64  `json:"ttl"`
-	DefaultTTL bool   `json:"defaultttl"`
+	ID        string `json:"id"`
+	LongURL   string `json:"longurl"`
+	Short     string `json:"short"`
+	LastID    uint64 `json:"lastid"`
+	TTL       int64  `json:"ttl"`
+	ExtendTTL bool   `json:"extendttl"`
 }

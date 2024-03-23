@@ -24,8 +24,9 @@ func NewServer(s Config) *Server {
 		Cache:  cache.NewRedisCache(s.RedisHost),
 		DB:     db.NewDynamoDBClient(s.Region),
 	}
+	// database init
 	srv.DB.DDBInit()
-
+	// cache access test
 	err := srv.Cache.Set("test", "ok")
 	if err != nil {
 		log.Fatalf("main : no redis connection")

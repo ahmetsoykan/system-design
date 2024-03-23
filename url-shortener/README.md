@@ -1,7 +1,7 @@
 # url-shortener
 
 ## Intro
-url-shortener is responsible for generationg short URLs and handling redirection back to original URL when short url endpoint has called.
+url-shortener is responsible for generating short URLs and handling redirection back to the original URL when the short url endpoint has been called.
 
 You can see the API endpoints below:
 

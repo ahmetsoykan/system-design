@@ -41,10 +41,10 @@ func (s *Server) shorten(w http.ResponseWriter, r *http.Request) {
 	}
 
 	var expiry int64
-	var defaultTTL bool
+	var extendTTL bool
 	if requestBody.TTL == "" {
 		expiry = time.Now().UTC().Add(time.Hour * 24 * 90).Unix()
-		defaultTTL = true
+		extendTTL = true
 	} else {
 		i, err := strconv.ParseInt(requestBody.TTL, 10, 64)
 		if err != nil {
@@ -52,13 +52,13 @@ func (s *Server) shorten(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 		expiry = i
-		defaultTTL = false
+		extendTTL = false
 	}
 
 	data, err := s.DB.DDBPutItem(db.Item{
-		LongURL:    requestBody.URL,
-		TTL:        expiry,
-		DefaultTTL: defaultTTL,
+		LongURL:   requestBody.URL,
+		TTL:       expiry,
+		ExtendTTL: extendTTL,
 	})
 	if err != nil {
 		http.Error(w, errors.New("error: "+err.Error()).Error(), http.StatusBadRequest)

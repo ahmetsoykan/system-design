@@ -15,11 +15,11 @@ func TestDB(t *testing.T) {
 
 	// Write operation
 	putItem, err := d.DDBPutItem(Item{
-		ID:         "",
-		LongURL:    "http://facebook.com/",
-		Short:      "",
-		DefaultTTL: true,
-		TTL:        0,
+		ID:        "",
+		LongURL:   "http://facebook.com/",
+		Short:     "",
+		ExtendTTL: true,
+		TTL:       0,
 	})
 	if err != nil {
 		t.Errorf("failed: got %s, want nil", err.Error())
