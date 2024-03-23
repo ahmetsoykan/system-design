@@ -68,10 +68,11 @@ If the Bucket and ECR created, follow with the next step.
 - Redirect endpoint performance tests
 
 ```bash
+ab -n 10000 -c 200 -k http://${HOST}/Q0v
 
-Benchmarking url-shortener-171881231.eu-west-1.elb.amazonaws.com (be patient)
+Benchmarking ${HOST} (be patient)
 Server Software:        
-Server Hostname:        url-shortener-171881231.eu-west-1.elb.amazonaws.com
+Server Hostname:        ${HOST}
 Server Port:            80
 
 Document Path:          /Q0w
@@ -112,10 +113,13 @@ Percentage of the requests served within a certain time (ms)
 - Shorten endpoint performance tests
 
 ```bash
-Benchmarking url-shortener-171881231.eu-west-1.elb.amazonaws.com (be patient)
+
+ab -n 10000 -c 50 -p data.json -rk http://${HOST}/shorten
+
+Benchmarking ${HOST} (be patient)
 
 Server Software:        
-Server Hostname:        url-shortener-171881231.eu-west-1.elb.amazonaws.com
+Server Hostname:        ${HOST}
 Server Port:            80
 
 Document Path:          /shorten
