@@ -57,8 +57,8 @@ module "ecs_service" {
       port_mappings = [
         {
           name          = "awscollector"
-          containerPort = "4317"
-          hostPort      = "4317"
+          containerPort = 4317
+          hostPort      = 4317
           protocol      = "tcp"
         }
       ]
