@@ -40,6 +40,10 @@ module "ecs_service" {
     effect    = "Allow"
     actions   = ["dynamodb:*"]
     resources = ["${var.dynamodb_table_arn}", "${var.dynamodb_table_arn}/*"]
+    }, {
+    effect    = "Allow"
+    actions   = ["xray:*"]
+    resources = ["*"]
   }]
 
   # Enables ECS Exec
