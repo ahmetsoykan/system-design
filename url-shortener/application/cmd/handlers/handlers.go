@@ -18,12 +18,6 @@ import (
 // Health endpoint returns 200 status code
 func (s *Server) health(w http.ResponseWriter, r *http.Request) {
 
-	ctx := r.Context()
-	tracer := otel.Tracer("health")
-	ctx, span := tracer.Start(ctx, "/heath")
-
-	defer span.End()
-
 	w.WriteHeader(http.StatusOK)
 	resp := map[string]string{"Status": "OK"}
 	byteData, _ := json.Marshal(resp)
