@@ -33,7 +33,7 @@ module "ecs_service" {
 
   desired_count = 3
 
-  cpu    = 2000
+  cpu    = 2048
   memory = 4096
 
   tasks_iam_role_statements = [{
