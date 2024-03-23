@@ -33,7 +33,7 @@ module "ecs_service" {
 
   desired_count = 3
 
-  cpu    = 1024
+  cpu    = 2000
   memory = 4096
 
   tasks_iam_role_statements = [{
@@ -72,7 +72,7 @@ module "ecs_service" {
 
     (local.container_name) = {
       cpu       = 1024
-      memory    = 4096
+      memory    = 3072
       essential = true
       image     = var.container_image
       port_mappings = [
